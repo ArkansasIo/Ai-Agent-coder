@@ -15,10 +15,15 @@
 
 - src/cli.ts — command-line entry point
 - src/agent.ts — task/context orchestration
+- src/chat.ts — interactive chat loop
 - src/config.ts — environment configuration
 - src/types.ts — shared domain types
 - src/repository.ts — bounded repository scanner
 - src/patches.ts — structured patch types and path validation
+- src/patch-parser.ts — safe model patch parser
+- src/diff.ts — deterministic patch preview
+- src/session.ts — in-memory chat history
+- src/test-runner.ts — allowlisted verification commands
 - src/git.ts — safe Git status/diff helpers
 - src/tool-policy.ts — capability policy
 - src/providers/ollama.ts — Ollama API adapter
@@ -29,6 +34,8 @@
 - tests/provider.test.ts — Ollama endpoint tests
 - tests/config.test.ts — configuration tests
 - tests/patches.test.ts — patch path security tests
+- tests/session.test.ts — chat session tests
+- tests/patch-parser.test.ts — structured patch validation and preview tests
 
 ## Documentation
 
@@ -39,6 +46,9 @@
 - docs/SEQUENCE-EDIT.md
 - docs/SECURITY.md
 - docs/ROADMAP.md
+- docs/AGENT-LOOP.md
+- docs/PATCH-PROTOCOL.md
+- docs/FILE-MANIFEST.md
 
 ## GitHub
 
