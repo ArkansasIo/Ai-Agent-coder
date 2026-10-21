@@ -1,9 +1,12 @@
 {
   "name": "ai-agent-coder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Safe-by-default local AI coding agent starter",
+  "description": "Safe-by-default local AI coding agent with Ollama chat and model management",
   "type": "module",
+  "bin": {
+    "ai-agent-coder": "./dist/src/cli.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/src/cli.js",
