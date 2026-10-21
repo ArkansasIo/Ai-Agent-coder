@@ -12,7 +12,7 @@
   },
   "engines": { "node": ">=20" },
   "devDependencies": {
-    "@types/node": "^22.15.0",
+    "@types/node": "^26.6.5",
     "typescript": "^5.8.3"
   }
 }
