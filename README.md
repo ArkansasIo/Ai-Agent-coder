@@ -1,32 +1,31 @@
 # AI Agent Coder
 
-A Windows-friendly, local-first AI coding-agent starter built on TypeScript and Ollama.
+A Windows-friendly, local-first AI coding-agent starter built with TypeScript and Ollama.
 
-## Features
+## What is implemented
 
 - Ollama health/version check and model listing
-- Bounded repository scanner for common source and documentation files
-- Context-aware advisory change planning
-- Read-only-by-default workflow: no generated patches are automatically applied
-- Unit tests, UML/design docs, security notes, roadmap, and GitHub Actions CI
+- Bounded repository source inspection
+- Context-aware implementation planning
+- Repository-relative path validation for future edits
+- Explicit tool capability policy
+- Read-only Git status/diff helpers
+- Unit tests
+- Windows GitHub Actions CI
+- UML, architecture, API, security, and design documentation
 
-## Requirements
+## Quick start
 
-- Node.js 20+
-- npm
-- Optional: Ollama running at http://localhost:11434
-- Optional model: `ollama pull qwen2.5-coder:7b`
-
-## Setup
+Requirements: Node.js 20+, npm, and optionally Ollama.
 
 ```powershell
 npm install
-npm run build
+npm run check
 npm test
 npm start -- --help
 ```
 
-## Commands
+With Ollama running:
 
 ```powershell
 npm start -- health
@@ -35,23 +34,46 @@ npm start -- inspect . --max-files 30
 npm start -- plan . "Add validation for API inputs" --model qwen2.5-coder:7b
 ```
 
-Set `OLLAMA_HOST` to select an Ollama API endpoint. Default: `http://localhost:11434`.
+Configure the provider with `OLLAMA_HOST`; the default is `http://localhost:11434`. See `.env.example` for supported configuration names.
 
-The plan command prints advisory text. It does not write files or execute shell commands. See [Security](docs/SECURITY.md).
+## Safety boundary
 
-## Layout
+The current agent is deliberately advisory. It reads bounded repository context and asks a model for a plan. It does **not** silently edit files, execute model-produced shell commands, install dependencies, or claim that tests passed when they did not run.
 
-- `src/cli.ts` — command-line interface
-- `src/agent.ts` — prompt and context orchestration
-- `src/providers/ollama.ts` — Ollama HTTP client
-- `src/repository.ts` — bounded repository scanner
-- `tests/` — unit tests
-- `docs/` — architecture, UML, security, roadmap
+Future write support must use structured patches, path validation, diff preview, explicit approval, and an isolated Git worktree. See [docs/SECURITY.md](docs/SECURITY.md) and [docs/SEQUENCE-EDIT.md](docs/SEQUENCE-EDIT.md).
+
+## Project structure
+
+```text
+src/
+  cli.ts
+  agent.ts
+  config.ts
+  types.ts
+  repository.ts
+  patches.ts
+  git.ts
+  tool-policy.ts
+  providers/ollama.ts
+
+tests/
+docs/
+.github/
+```
+
+See [docs/FILE-MANIFEST.md](docs/FILE-MANIFEST.md) for the complete file inventory.
 
 ## Roadmap
 
-See [Roadmap](docs/ROADMAP.md) for patch generation with explicit approval, Git worktree support, test execution isolation, session persistence, and a Windows UI.
+1. Structured patch protocol
+2. Diff preview and explicit approval
+3. Git worktree-based application
+4. Allowlisted test/build runner with timeouts
+5. Persistent sessions and task history
+6. Windows desktop UI
+7. Repository indexing/RAG
+8. Multi-agent orchestration with explicit tool grants
 
 ## License
 
-MIT for this starter application. Model weights and dependencies retain their respective licenses.
+MIT for this starter application. Ollama, model weights, and dependencies retain their respective licenses.
