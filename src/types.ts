@@ -22,3 +22,24 @@ export type AgentPlan = {
   includedFiles: string[];
   response: string;
 };
+
+export type ModelDetails = {
+  modelfile?: string;
+  parameters?: string;
+  template?: string;
+  details?: Record<string, unknown>;
+  model_info?: Record<string, unknown>;
+};
+
+export type PullProgress = {
+  status?: string;
+  digest?: string;
+  total?: number;
+  completed?: number;
+  error?: string;
+};
+
+export type ToolResult = {
+  ok: boolean;
+  output: string;
+};
