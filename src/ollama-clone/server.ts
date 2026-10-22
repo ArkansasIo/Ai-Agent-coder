@@ -1,7 +1,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { URL } from "node:url";
-import type { Backend, ChatRequest, GenerateRequest } from "./types.js";
+import type { ChatRequest, GenerateRequest, Backend } from "./types.js";
 import { ModelStore } from "./model-store.js";
+import { handleOpenAIRequest } from "./openai.js";
 
 const json = (res: ServerResponse, status: number, value: unknown) => {
   const body = JSON.stringify(value);
@@ -29,9 +30,11 @@ export function createOllamaCompatibleServer(options: CloneServerOptions) {
   const host = options.host ?? "127.0.0.1";
   const port = options.port ?? Number(process.env.OLLAMA_CLONE_PORT ?? 11434);
   const store = options.store ?? new ModelStore();
+  const backend: Backend = options.backend;
 
   return createServer(async (req, res) => {
     try {
+      if (await handleOpenAIRequest(req, res, backend)) return;
       const url = new URL(req.url ?? "/", `http://${req.headers.host ?? `${host}:${port}`}`);
       const path = url.pathname;
       if (req.method === "GET" && path === "/") return json(res, 200, { status: "Ollama-compatible runtime" });
@@ -54,7 +57,7 @@ export function createOllamaCompatibleServer(options: CloneServerOptions) {
       }
       if (req.method === "POST" && path === "/api/generate") {
         const input = await body(req) as GenerateRequest;
-        const source = options.backend.generate(input);
+        const source = backend.generate(input);
         if (input.stream === false) {
           let response = "";
           for await (const chunk of source) response += chunk;
@@ -64,7 +67,7 @@ export function createOllamaCompatibleServer(options: CloneServerOptions) {
       }
       if (req.method === "POST" && path === "/api/chat") {
         const input = await body(req) as ChatRequest;
-        const source = options.backend.chat(input);
+        const source = backend.chat(input);
         if (input.stream === false) {
           let response = "";
           for await (const chunk of source) response += chunk;
